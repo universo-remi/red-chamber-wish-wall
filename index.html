@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<head>
+  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6f3ed">
@@ -327,6 +327,7 @@
       }
     }
   </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
@@ -479,8 +480,16 @@
 
 
   <script>
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbyR-8OPisnU0hqhJa3Y2oAfLZXEA1PnkXK1YkpovPG6PijeDVEG8szyBaD39p63uPGg/exec";
+    const SUPABASE_URL =
+  "https://vwlrwbwkjdisqnuyhyjv.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_eBt028R9cdusb-jR6Kd5jA_eY6HMlv2";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
     const form = document.getElementById("wishForm");
     const wishInput = document.getElementById("wish");
@@ -533,18 +542,17 @@
           成功後顯示完成頁。
         */
 
-        await fetch(API_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify({
-            wish: wish,
-            instagram: instagram,
-            color: color
-          })
-        });
+  const { error } = await db
+  .from("wishes")
+  .insert({
+    wish: wish,
+    instagram: "@" + instagram,
+    color: color
+  });
+
+if (error) {
+  throw error;
+}
 
         document.getElementById("formPage").style.display = "none";
         document.getElementById("successPage").style.display = "flex";
