@@ -2,578 +2,627 @@
 <html lang="zh-Hant">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red Chamber Wish Wall</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Red Chamber Wish Wall</title>
 
-<style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-html,
-body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+    }
 
-body {
-  font-family:
-    "Noto Sans TC",
-    "PingFang TC",
-    "Microsoft JhengHei",
-    sans-serif;
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  background: #f5f2eb;
-  color: #292c29;
-}
+      background: #202320;
 
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
 
-/* =====================================
-   9:16 WALL
-===================================== */
 
-.wall {
+    /* =========================================
+       9:16 SCREEN
+       ========================================= */
 
-  position: relative;
+    #screen {
+      position: relative;
 
-  width: 100vw;
-  height: 100vh;
+      width: min(100vw, calc(100vh * 9 / 16));
+      height: min(100vh, calc(100vw * 16 / 9));
 
-  overflow: hidden;
+      aspect-ratio: 9 / 16;
 
-  background:
+      overflow: hidden;
 
-    radial-gradient(
-      circle at 15% 12%,
-      rgba(206,217,208,.60),
-      transparent 25%
-    ),
+      color: #292d29;
 
-    radial-gradient(
-      circle at 90% 80%,
-      rgba(221,207,194,.35),
-      transparent 27%
-    ),
+      background:
+        radial-gradient(
+          circle at 12% 10%,
+          rgba(206, 217, 208, .72),
+          transparent 25%
+        ),
 
-    #f6f3ed;
-}
+        radial-gradient(
+          circle at 88% 67%,
+          rgba(223, 210, 196, .35),
+          transparent 28%
+        ),
 
+        #f6f3ed;
 
-.wall::after {
+      box-shadow:
+        0 0 60px rgba(0, 0, 0, .18);
+    }
 
-  content: "";
 
-  position: absolute;
-  inset: 0;
+    #screen::after {
+      content: "";
 
-  pointer-events: none;
+      position: absolute;
+      inset: 0;
 
-  opacity: .13;
+      z-index: 200;
 
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      rgba(40,45,40,.035) 0,
-      rgba(40,45,40,.035) 1px,
-      transparent 1px,
-      transparent 5px
-    );
+      pointer-events: none;
 
-}
+      opacity: .10;
 
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(40, 45, 40, .04) 0,
+          rgba(40, 45, 40, .04) 1px,
+          transparent 1px,
+          transparent 5px
+        );
+    }
 
-/* =====================================
-   BRAND
-===================================== */
 
-.brand {
+    /* =========================================
+       BRAND
+       ========================================= */
 
-  position: absolute;
+    .brand {
+      position: absolute;
 
-  top: 4.5%;
-  left: 50%;
+      top: 4.2%;
+      left: 50%;
 
-  transform: translateX(-50%);
+      transform: translateX(-50%);
 
-  z-index: 20;
+      z-index: 30;
 
-  text-align: center;
+      text-align: center;
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
-  font-size: clamp(15px, 2.1vw, 30px);
+      font-size:
+        clamp(12px, 2vh, 24px);
 
-  letter-spacing: .32em;
+      letter-spacing:
+        .32em;
 
-  white-space: nowrap;
-}
+      white-space:
+        nowrap;
+    }
 
 
-.brand-cn {
+    .brand-cn {
+      display: block;
 
-  display: block;
+      margin-top:
+        .8vh;
 
-  margin-top: 9px;
+      font-family:
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
 
-  font-family:
-    "PingFang TC",
-    sans-serif;
+      font-size:
+        .48em;
 
-  font-size: .5em;
+      letter-spacing:
+        .5em;
 
-  letter-spacing: .5em;
+      color:
+        #747b75;
+    }
 
-  color: #777d77;
-}
 
+    /* =========================================
+       WISH AREA
+       只允許心願出現在這個區域
+       ========================================= */
 
-/* =====================================
-   CENTER MESSAGE
-===================================== */
+    #wishArea {
+      position: absolute;
 
-.hero {
+      top: 10%;
+      left: 0;
 
-  position: absolute;
+      width: 100%;
+      height: 67%;
 
-  top: 41%;
-  left: 50%;
+      z-index: 5;
 
-  width: 82%;
+      overflow: hidden;
 
-  transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
 
-  z-index: 2;
 
-  text-align: center;
+    #wishes {
+      position: absolute;
+      inset: 0;
+    }
 
-  pointer-events: none;
-}
 
+    /* =========================================
+       WISH CARDS
+       ========================================= */
 
-.eyebrow {
+    .wish-card {
+      position: absolute;
 
-  margin-bottom: 25px;
+      width: 29%;
 
-  font-size: clamp(9px, 1.15vw, 15px);
+      min-height: 10%;
 
-  letter-spacing: .34em;
+      padding:
+        2.2%
+        2.5%;
 
-  color: #858b85;
-}
+      border:
+        1px solid
+        rgba(60, 65, 60, .07);
 
+      box-shadow:
+        0 8px 28px
+        rgba(40, 45, 40, .055);
 
-.hero h1 {
+      opacity: 0;
 
-  margin: 0;
+      animation:
+        wishAppear .55s ease forwards,
+        wishFloat 7s ease-in-out infinite alternate;
+    }
 
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
 
-  font-size: clamp(34px, 6vw, 74px);
+    .wish-text {
+      font-family:
+        Georgia,
+        "Noto Serif TC",
+        "Songti TC",
+        serif;
 
-  line-height: 1.55;
+      font-size:
+        clamp(9px, 1.6vh, 18px);
 
-  font-weight: 400;
+      line-height:
+        1.7;
 
-  letter-spacing: .13em;
-}
+      letter-spacing:
+        .025em;
 
+      overflow-wrap:
+        anywhere;
+    }
 
-.hero p {
 
-  margin: 24px auto 0;
+    .wish-user {
+      margin-top:
+        1vh;
 
-  font-size: clamp(10px, 1.35vw, 17px);
+      font-size:
+        clamp(6px, .9vh, 10px);
 
-  line-height: 1.8;
+      letter-spacing:
+        .05em;
 
-  letter-spacing: .12em;
+      color:
+        rgba(45, 50, 45, .55);
 
-  color: #7d837d;
-}
+      overflow:
+        hidden;
 
+      text-overflow:
+        ellipsis;
 
-/* =====================================
-   WISH CARDS
-===================================== */
+      white-space:
+        nowrap;
+    }
 
-#wishes {
 
-  position: absolute;
+    /* =========================================
+       五種心願色
+       與投稿頁 color 值連動
+       ========================================= */
 
-  inset: 0;
+    .color-green {
+      background:
+        rgba(206, 217, 208, .93);
+    }
 
-  z-index: 5;
+    .color-rose {
+      background:
+        rgba(217, 197, 194, .92);
+    }
 
-  pointer-events: none;
-}
+    .color-peach {
+      background:
+        rgba(223, 203, 184, .92);
+    }
 
+    .color-mauve {
+      background:
+        rgba(201, 193, 202, .92);
+    }
 
-.wish-card {
+    .color-sand {
+      background:
+        rgba(216, 208, 190, .93);
+    }
 
-  position: absolute;
 
-  width: clamp(145px, 28vw, 260px);
+    /* =========================================
+       BOTTOM BRAND MESSAGE
+       ========================================= */
 
-  min-height: 100px;
+    .bottom-content {
+      position: absolute;
 
-  padding: clamp(16px, 2.3vw, 25px);
+      left: 8%;
+      right: 8%;
+      bottom: 3.8%;
 
-  border:
+      z-index: 30;
+    }
 
-    1px solid
-    rgba(70,75,70,.08);
 
-  box-shadow:
+    .main-message {
+      width: 100%;
 
-    0 8px 35px
-    rgba(40,45,40,.05);
+      margin-bottom:
+        3.2vh;
 
-  opacity: 0;
+      text-align:
+        center;
 
-  animation:
+      font-family:
+        Georgia,
+        "Noto Serif TC",
+        "Songti TC",
+        serif;
 
-    appear .65s ease forwards,
+      font-size:
+        clamp(17px, 2.8vh, 31px);
 
-    float 7s ease-in-out
-    infinite alternate;
-}
+      font-weight:
+        400;
 
+      letter-spacing:
+        .09em;
 
-.wish-text {
+      white-space:
+        nowrap;
 
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
+      color:
+        #303530;
+    }
 
-  font-size: clamp(12px, 2vw, 20px);
 
-  line-height: 1.75;
+    /* =========================================
+       CTA / QR AREA
+       ========================================= */
 
-  letter-spacing: .04em;
-}
+    .cta-area {
+      width: 100%;
 
+      display: flex;
 
-.wish-user {
+      align-items: center;
 
-  margin-top: 12px;
+      justify-content:
+        space-between;
 
-  font-size: clamp(8px, 1.15vw, 12px);
+      padding-top:
+        2vh;
 
-  color:
-    rgba(50,55,50,.55);
-}
+      border-top:
+        1px solid
+        rgba(60, 65, 60, .10);
+    }
 
 
-/* 顏色 */
+    .cta-copy {
+      width: 60%;
 
-.color-green {
-  background:
-    rgba(206,217,208,.78);
-}
+      color:
+        #6f766f;
 
-.color-rose {
-  background:
-    rgba(217,197,194,.74);
-}
+      font-size:
+        clamp(7px, 1.05vh, 12px);
 
-.color-peach {
-  background:
-    rgba(223,203,184,.74);
-}
+      line-height:
+        1.8;
 
-.color-mauve {
-  background:
-    rgba(201,193,202,.74);
-}
+      letter-spacing:
+        .06em;
+    }
 
-.color-sand {
-  background:
-    rgba(216,208,190,.76);
-}
 
+    .cta-title {
+      display: block;
 
-/* =====================================
-   NEW WISH SPOTLIGHT
-===================================== */
+      margin-bottom:
+        .35vh;
 
-#spotlight {
+      font-family:
+        Georgia,
+        "Noto Serif TC",
+        serif;
 
-  position: fixed;
+      font-size:
+        1.32em;
 
-  inset: 0;
+      font-weight:
+        400;
 
-  z-index: 100;
+      color:
+        #343934;
+    }
 
-  display: flex;
 
-  align-items: center;
-  justify-content: center;
+    /* 目前先保留 QR 位置 */
 
-  background:
-    rgba(35,39,35,.20);
+    .qr-placeholder {
+      width:
+        clamp(48px, 7.2vh, 82px);
 
-  backdrop-filter:
-    blur(3px);
+      aspect-ratio:
+        1 / 1;
 
-  opacity: 0;
+      display: flex;
 
-  visibility: hidden;
+      align-items: center;
 
-  transition:
+      justify-content: center;
 
-    opacity .4s ease,
+      border:
+        1px solid
+        rgba(55, 60, 55, .18);
 
-    visibility .4s;
-}
+      background:
+        rgba(255, 255, 255, .55);
 
+      color:
+        #858b85;
 
-#spotlight.active {
+      font-size:
+        clamp(5px, .7vh, 8px);
 
-  opacity: 1;
+      letter-spacing:
+        .08em;
 
-  visibility: visible;
-}
+      text-align:
+        center;
+    }
 
 
-.spotlight-card {
+    .status {
+      position: absolute;
 
-  width: 78%;
+      right: 0;
+      bottom: -2.1vh;
 
-  min-height: 28vh;
+      font-size:
+        clamp(5px, .68vh, 8px);
 
-  padding:
+      letter-spacing:
+        .12em;
 
-    7vh
-    8%;
+      color:
+        #a0a49f;
+    }
 
-  display: flex;
 
-  flex-direction: column;
+    /* =========================================
+       SPOTLIGHT
+       ========================================= */
 
-  align-items: center;
+    #spotlight {
+      position: absolute;
+      inset: 0;
 
-  justify-content: center;
+      z-index: 100;
 
-  text-align: center;
+      display: flex;
 
-  background:
-    rgba(248,246,240,.97);
+      align-items: center;
+      justify-content: center;
 
-  box-shadow:
+      background:
+        rgba(36, 40, 36, .21);
 
-    0 30px 90px
-    rgba(20,25,20,.15);
+      backdrop-filter:
+        blur(3px);
 
-  transform:
-    scale(.96);
+      opacity: 0;
 
-  opacity: 0;
+      visibility: hidden;
 
-  transition:
+      transition:
+        opacity .4s ease,
+        visibility .4s ease;
+    }
 
-    transform .4s ease,
 
-    opacity .4s ease;
-}
+    #spotlight.active {
+      opacity: 1;
+      visibility: visible;
+    }
 
 
-#spotlight.active
-.spotlight-card {
+    .spotlight-card {
+      width: 78%;
 
-  transform:
-    scale(1);
+      min-height: 25%;
 
-  opacity: 1;
-}
+      padding:
+        5.5vh
+        8%;
 
+      display: flex;
 
-.new-label {
+      flex-direction: column;
 
-  margin-bottom: 28px;
+      align-items: center;
 
-  font-size:
-    clamp(10px, 1.5vw, 16px);
+      justify-content: center;
 
-  letter-spacing:
-    .25em;
+      text-align: center;
 
-  color:
-    #758078;
-}
+      border:
+        1px solid
+        rgba(60, 65, 60, .07);
 
+      box-shadow:
+        0 30px 75px
+        rgba(20, 25, 20, .16);
 
-.new-wish {
+      transform:
+        scale(.96);
 
-  max-width: 90%;
+      opacity: 0;
 
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
+      transition:
+        transform .4s ease,
+        opacity .4s ease,
+        background .35s ease;
+    }
 
-  font-size:
-    clamp(28px, 5vw, 58px);
 
-  line-height: 1.65;
+    #spotlight.active
+    .spotlight-card {
+      transform:
+        scale(1);
 
-  letter-spacing: .05em;
-}
+      opacity: 1;
+    }
 
 
-.new-user {
+    .new-label {
+      margin-bottom:
+        2.3vh;
 
-  margin-top: 28px;
+      font-size:
+        clamp(7px, 1.1vh, 13px);
 
-  font-size:
-    clamp(11px, 1.5vw, 16px);
+      letter-spacing:
+        .23em;
 
-  color:
-    #737973;
-}
+      color:
+        #68746b;
+    }
 
 
-/* =====================================
-   BOTTOM AREA
-===================================== */
+    .new-wish {
+      width: 100%;
 
-.bottom {
+      font-family:
+        Georgia,
+        "Noto Serif TC",
+        "Songti TC",
+        serif;
 
-  position: absolute;
+      font-size:
+        clamp(21px, 4vh, 45px);
 
-  bottom: 4%;
+      line-height:
+        1.6;
 
-  left: 50%;
+      letter-spacing:
+        .04em;
 
-  transform:
-    translateX(-50%);
+      overflow-wrap:
+        anywhere;
+    }
 
-  width: 82%;
 
-  z-index: 15;
+    .new-user {
+      margin-top:
+        2.2vh;
 
-  display: flex;
+      font-size:
+        clamp(8px, 1.1vh, 13px);
 
-  justify-content:
-    space-between;
+      letter-spacing:
+        .06em;
 
-  align-items:
-    flex-end;
-}
+      color:
+        #676e68;
+    }
 
 
-.invite {
+    /* =========================================
+       ANIMATION
+       ========================================= */
 
-  max-width: 55%;
+    @keyframes wishAppear {
 
-  font-size:
-    clamp(10px, 1.3vw, 15px);
+      from {
+        opacity: 0;
 
-  line-height: 1.8;
+        transform:
+          translateY(8px);
+      }
 
-  letter-spacing:
-    .08em;
+      to {
+        opacity: .94;
 
-  color:
-    #707770;
-}
+        transform:
+          translateY(0);
+      }
 
+    }
 
-.invite strong {
 
-  display: block;
+    @keyframes wishFloat {
 
-  margin-bottom: 4px;
+      from {
+        translate:
+          0 0;
+      }
 
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    serif;
+      to {
+        translate:
+          0 -5px;
+      }
 
-  font-size:
-    1.25em;
+    }
 
-  font-weight: 400;
-
-  color:
-    #343a35;
-}
-
-
-.status {
-
-  font-size:
-    clamp(7px, 1vw, 10px);
-
-  letter-spacing:
-    .14em;
-
-  color:
-    #9a9e99;
-}
-
-
-/* =====================================
-   ANIMATION
-===================================== */
-
-@keyframes appear {
-
-  from {
-
-    opacity: 0;
-
-    transform:
-      translateY(10px);
-
-  }
-
-  to {
-
-    opacity: .92;
-
-    transform:
-      translateY(0);
-
-  }
-
-}
-
-
-@keyframes float {
-
-  from {
-
-    translate:
-      0 0;
-
-  }
-
-  to {
-
-    translate:
-      0 -6px;
-
-  }
-
-}
-
-</style>
+  </style>
 
 </head>
 
@@ -581,742 +630,837 @@ body {
 <body>
 
 
-<div class="wall">
+  <main id="screen">
 
 
-  <div class="brand">
+    <!-- BRAND -->
 
-    RED CHAMBER
+    <header class="brand">
 
-    <span class="brand-cn">
-      朱 棧
-    </span>
+      RED CHAMBER
 
-  </div>
+      <span class="brand-cn">
+        朱 棧
+      </span>
+
+    </header>
 
 
 
-  <div class="hero">
+    <!-- WISHES -->
 
-    <div class="eyebrow">
+    <section id="wishArea">
 
-      RED CHAMBER WISH WALL
+      <div id="wishes"></div>
+
+    </section>
+
+
+
+    <!-- BOTTOM -->
+
+    <section class="bottom-content">
+
+
+      <div class="main-message">
+
+        願你所念，皆有回響。
+
+      </div>
+
+
+      <div class="cta-area">
+
+
+        <div class="cta-copy">
+
+          <span class="cta-title">
+
+            你也有一個心願嗎？
+
+          </span>
+
+          掃描 QR Code，寫下你的心願
+
+        </div>
+
+
+        <div class="qr-placeholder">
+
+          QR<br>CODE
+
+        </div>
+
+
+      </div>
+
+
+      <div
+        class="status"
+        id="status">
+
+        CONNECTING…
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- NEW WISH SPOTLIGHT -->
+
+    <div id="spotlight">
+
+
+      <div
+        class="spotlight-card"
+        id="spotlightCard">
+
+
+        <div class="new-label">
+
+          ✦ 一個新的心願抵達
+
+        </div>
+
+
+        <div
+          class="new-wish"
+          id="newWish">
+        </div>
+
+
+        <div
+          class="new-user"
+          id="newUser">
+        </div>
+
+
+      </div>
+
 
     </div>
 
 
-    <h1>
+  </main>
 
-      願你所念，<br>
-      皆有回響。
 
-    </h1>
 
+  <script>
 
-    <p>
+    /* =========================================
+       SUPABASE
+       ========================================= */
 
-      把心願留在這裡，<br>
-      讓它被世界輕輕接住
+    const SUPABASE_URL =
+      "https://vwlrwbwkjdisqnuyhyjv.supabase.co";
 
-    </p>
 
-  </div>
+    const SUPABASE_KEY =
+      "sb_publishable_eBt028R9cdusb-jR6Kd5jA_eY6HMlv2";
 
 
+    const db =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
 
-  <div id="wishes"></div>
 
 
+    /* =========================================
+       SETTINGS
+       ========================================= */
 
-  <div class="bottom">
+    const SPOTLIGHT_DURATION =
+      2500;
 
-    <div class="invite">
 
-      <strong>
-        你也有一個心願嗎？
-      </strong>
+    const SPOTLIGHT_GAP =
+      400;
 
-      掃描 QR Code，
-      寫下你的心願
 
-    </div>
+    const MAX_VISIBLE_WISHES =
+      8;
 
 
-    <div
-      class="status"
-      id="status">
 
-      CONNECTING…
+    let wishes = [];
 
-    </div>
 
-  </div>
+    let knownIds =
+      new Set();
 
 
-</div>
+    let wishQueue =
+      [];
 
 
+    let spotlightRunning =
+      false;
 
-<div id="spotlight">
 
-  <div class="spotlight-card">
 
+    /* =========================================
+       心願位置
+       座標只會存在 Wish Area 裡
+       不可能碰到底部文案
+       ========================================= */
 
-    <div class="new-label">
+    const positions = [
 
-      ✦ 一個新的心願抵達
-
-    </div>
-
-
-    <div
-      class="new-wish"
-      id="newWish">
-    </div>
-
-
-    <div
-      class="new-user"
-      id="newUser">
-    </div>
-
-
-  </div>
-
-</div>
-
-
-
-<script>
-
-/* =====================================
-   SUPABASE
-===================================== */
-
-const SUPABASE_URL =
-"https://vwlrwbwkjdisqnuyhyjv.supabase.co";
-
-
-const SUPABASE_KEY =
-"sb_publishable_eBt028R9cdusb-jR6Kd5jA_eY6HMlv2";
-
-
-const db =
-window.supabase.createClient(
-
-  SUPABASE_URL,
-
-  SUPABASE_KEY
-
-);
-
-
-/* =====================================
-   SETTINGS
-===================================== */
-
-/*
-  新心願主要停留 2.5 秒
-*/
-
-const SPOTLIGHT_DURATION =
-2500;
-
-
-/*
-  每則之間 0.4 秒
-*/
-
-const SPOTLIGHT_GAP =
-400;
-
-
-/*
-  直式畫面不要塞太滿
-*/
-
-const MAX_VISIBLE_WISHES =
-8;
-
-
-let wishes = [];
-
-let knownIds =
-new Set();
-
-let wishQueue = [];
-
-let spotlightRunning =
-false;
-
-
-/* =====================================
-   9:16 POSITIONS
-===================================== */
-
-const positions = [
-
-  {
-    left: 7,
-    top: 14
-  },
-
-  {
-    left: 58,
-    top: 15
-  },
-
-  {
-    left: 5,
-    top: 27
-  },
-
-  {
-    left: 61,
-    top: 29
-  },
-
-  {
-    left: 7,
-    top: 54
-  },
-
-  {
-    left: 60,
-    top: 56
-  },
-
-  {
-    left: 13,
-    top: 70
-  },
-
-  {
-    left: 56,
-    top: 72
-  }
-
-];
-
-
-/* =====================================
-   INITIAL DATA
-===================================== */
-
-async function
-loadInitialWishes() {
-
-  const {
-    data,
-    error
-  } =
-
-  await db
-
-    .from("wishes")
-
-    .select("*")
-
-    .eq(
-      "is_visible",
-      true
-    )
-
-    .order(
-      "created_at",
       {
-        ascending: true
+        left: 7,
+        top: 5
+      },
+
+      {
+        left: 63,
+        top: 8
+      },
+
+      {
+        left: 35,
+        top: 23
+      },
+
+      {
+        left: 5,
+        top: 37
+      },
+
+      {
+        left: 65,
+        top: 39
+      },
+
+      {
+        left: 30,
+        top: 54
+      },
+
+      {
+        left: 8,
+        top: 70
+      },
+
+      {
+        left: 61,
+        top: 72
       }
-    )
 
-    .limit(50);
-
-
-  if (error) {
-
-    console.error(error);
-
-    document
-      .getElementById("status")
-      .textContent =
-      "CONNECTION ERROR";
-
-    return;
-
-  }
+    ];
 
 
-  wishes =
-    data || [];
+
+    /* =========================================
+       COLORS
+       ========================================= */
+
+    function sanitizeColor(color) {
+
+      const allowed = [
+        "green",
+        "rose",
+        "peach",
+        "mauve",
+        "sand"
+      ];
 
 
-  wishes.forEach(
-
-    wish => {
-
-      knownIds.add(
-        wish.id
-      );
+      return allowed.includes(color)
+        ? color
+        : "green";
 
     }
 
-  );
 
 
-  renderWall();
+    function getColorValue(color) {
+
+      const colors = {
+
+        green:
+          "rgba(206, 217, 208, .97)",
+
+        rose:
+          "rgba(217, 197, 194, .97)",
+
+        peach:
+          "rgba(223, 203, 184, .97)",
+
+        mauve:
+          "rgba(201, 193, 202, .97)",
+
+        sand:
+          "rgba(216, 208, 190, .97)"
+
+      };
 
 
-  updateStatus();
-
-}
-
-
-/* =====================================
-   REALTIME
-===================================== */
-
-function
-startRealtime() {
-
-
-  db
-  .channel(
-    "red-chamber-wall"
-  )
-
-
-  .on(
-
-    "postgres_changes",
-
-    {
-
-      event:
-        "INSERT",
-
-      schema:
-        "public",
-
-      table:
-        "wishes"
-
-    },
-
-
-    payload => {
-
-
-      const wish =
-        payload.new;
-
-
-      if (
-        knownIds.has(
-          wish.id
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      knownIds.add(
-        wish.id
-      );
-
-
-      if (
-        !wish.is_visible
-      ) {
-
-        return;
-
-      }
-
-
-      /*
-        先加入背景
-      */
-
-      wishes.push(
-        wish
-      );
-
-
-      renderWall();
-
-
-      /*
-        再進 Spotlight queue
-      */
-
-      wishQueue.push(
-        wish
-      );
-
-
-      if (
-        !spotlightRunning
-      ) {
-
-        playNextWish();
-
-      }
-
-
-      updateStatus();
+      return colors[
+        sanitizeColor(color)
+      ];
 
     }
 
-  )
 
 
-  .subscribe(
+    /* =========================================
+       INITIAL LOAD
+       ========================================= */
 
-    status => {
+    async function loadInitialWishes() {
+
+      const {
+        data,
+        error
+      } =
+
+        await db
+
+          .from("wishes")
+
+          .select("*")
+
+          .eq(
+            "is_visible",
+            true
+          )
+
+          .order(
+            "created_at",
+            {
+              ascending: true
+            }
+          )
+
+          .limit(50);
 
 
-      console.log(
-        "Realtime:",
-        status
-      );
 
+      if (error) {
 
-      if (
-        status ===
-        "SUBSCRIBED"
-      ) {
+        console.error(
+          "Initial load error:",
+          error
+        );
 
-        updateStatus();
-
-      }
-
-
-      if (
-        status ===
-        "CHANNEL_ERROR"
-        ||
-        status ===
-        "TIMED_OUT"
-      ) {
 
         document
           .getElementById(
             "status"
           )
           .textContent =
-          "RECONNECTING…";
+          "CONNECTION ERROR";
+
+
+        return;
 
       }
 
+
+
+      wishes =
+        data || [];
+
+
+
+      wishes.forEach(
+
+        wish => {
+
+          knownIds.add(
+            wish.id
+          );
+
+        }
+
+      );
+
+
+
+      renderWall();
+
+      updateStatus();
+
     }
 
-  );
-
-}
 
 
-/* =====================================
-   RENDER WALL
-===================================== */
+    /* =========================================
+       REALTIME
+       ========================================= */
 
-function
-renderWall() {
-
-
-  const container =
-
-    document
-    .getElementById(
-      "wishes"
-    );
+    function startRealtime() {
 
 
-  const visible =
+      db
 
-    wishes
-    .slice(
-      -MAX_VISIBLE_WISHES
-    );
-
-
-  container.innerHTML =
-    "";
+        .channel(
+          "red-chamber-wish-wall"
+        )
 
 
-  visible.forEach(
+        .on(
 
-    (
-      wish,
-      index
-    ) => {
+          "postgres_changes",
+
+          {
+
+            event:
+              "INSERT",
+
+            schema:
+              "public",
+
+            table:
+              "wishes"
+
+          },
 
 
-      const card =
+          payload => {
 
-        document
-        .createElement(
-          "div"
+
+            const wish =
+              payload.new;
+
+
+
+            if (
+              knownIds.has(
+                wish.id
+              )
+            ) {
+
+              return;
+
+            }
+
+
+
+            knownIds.add(
+              wish.id
+            );
+
+
+
+            if (
+              wish.is_visible !== true
+            ) {
+
+              return;
+
+            }
+
+
+
+            wishes.push(
+              wish
+            );
+
+
+
+            renderWall();
+
+            updateStatus();
+
+
+
+            wishQueue.push(
+              wish
+            );
+
+
+
+            if (
+              !spotlightRunning
+            ) {
+
+              playNextWish();
+
+            }
+
+          }
+
+        )
+
+
+        .subscribe(
+
+          status => {
+
+
+            console.log(
+              "Realtime status:",
+              status
+            );
+
+
+
+            if (
+              status ===
+              "SUBSCRIBED"
+            ) {
+
+              updateStatus();
+
+            }
+
+
+
+            if (
+              status ===
+              "CHANNEL_ERROR"
+              ||
+              status ===
+              "TIMED_OUT"
+              ||
+              status ===
+              "CLOSED"
+            ) {
+
+              document
+                .getElementById(
+                  "status"
+                )
+                .textContent =
+                "RECONNECTING…";
+
+            }
+
+          }
+
+        );
+
+    }
+
+
+
+    /* =========================================
+       RENDER WALL
+       ========================================= */
+
+    function renderWall() {
+
+
+      const container =
+        document.getElementById(
+          "wishes"
         );
 
 
-      card.className =
 
-        "wish-card color-" +
+      const visibleWishes =
+        wishes.slice(
+          -MAX_VISIBLE_WISHES
+        );
 
-        sanitizeColor(
+
+
+      container.innerHTML =
+        "";
+
+
+
+      visibleWishes.forEach(
+
+        (wish, index) => {
+
+
+          const card =
+            document.createElement(
+              "article"
+            );
+
+
+
+          const safeColor =
+            sanitizeColor(
+              wish.color
+            );
+
+
+
+          card.className =
+
+            "wish-card color-" +
+            safeColor;
+
+
+
+          const position =
+
+            positions[
+              index %
+              positions.length
+            ];
+
+
+
+          card.style.left =
+
+            position.left +
+            "%";
+
+
+
+          card.style.top =
+
+            position.top +
+            "%";
+
+
+
+          /*
+            輕微大小差異
+          */
+
+          const variations = [
+
+            .92,
+            .98,
+            .90,
+            1,
+            .94,
+            .98,
+            .91,
+            .96
+
+          ];
+
+
+
+          card.style.scale =
+
+            variations[index];
+
+
+
+          const text =
+
+            document.createElement(
+              "div"
+            );
+
+
+
+          text.className =
+            "wish-text";
+
+
+
+          text.textContent =
+            wish.wish;
+
+
+
+          const user =
+
+            document.createElement(
+              "div"
+            );
+
+
+
+          user.className =
+            "wish-user";
+
+
+
+          user.textContent =
+            wish.instagram;
+
+
+
+          card.appendChild(
+            text
+          );
+
+
+
+          card.appendChild(
+            user
+          );
+
+
+
+          container.appendChild(
+            card
+          );
+
+        }
+
+      );
+
+    }
+
+
+
+    /* =========================================
+       SPOTLIGHT
+       ========================================= */
+
+    function playNextWish() {
+
+
+      if (
+        wishQueue.length === 0
+      ) {
+
+        spotlightRunning =
+          false;
+
+        return;
+
+      }
+
+
+
+      spotlightRunning =
+        true;
+
+
+
+      const wish =
+        wishQueue.shift();
+
+
+
+      const spotlight =
+        document.getElementById(
+          "spotlight"
+        );
+
+
+
+      const spotlightCard =
+        document.getElementById(
+          "spotlightCard"
+        );
+
+
+
+      /*
+        Spotlight 同步投稿顏色
+      */
+
+      spotlightCard.style.background =
+
+        getColorValue(
           wish.color
         );
 
 
-      const position =
 
-        positions[
-          index %
-          positions.length
-        ];
+      document
+        .getElementById(
+          "newWish"
+        )
+        .textContent =
 
-
-      card.style.left =
-
-        position.left +
-        "%";
+        "「" +
+        wish.wish +
+        "」";
 
 
-      card.style.top =
 
-        position.top +
-        "%";
+      document
+        .getElementById(
+          "newUser"
+        )
+        .textContent =
 
-
-      const text =
-
-        document
-        .createElement(
-          "div"
-        );
-
-
-      text.className =
-        "wish-text";
-
-
-      text.textContent =
-        wish.wish;
-
-
-      const user =
-
-        document
-        .createElement(
-          "div"
-        );
-
-
-      user.className =
-        "wish-user";
-
-
-      user.textContent =
         wish.instagram;
 
-
-      card.appendChild(
-        text
-      );
-
-
-      card.appendChild(
-        user
-      );
-
-
-      container.appendChild(
-        card
-      );
-
-    }
-
-  );
-
-}
-
-
-/* =====================================
-   SPOTLIGHT
-===================================== */
-
-function
-playNextWish() {
-
-
-  if (
-    wishQueue.length === 0
-  ) {
-
-    spotlightRunning =
-      false;
-
-    return;
-
-  }
-
-
-  spotlightRunning =
-    true;
-
-
-  const wish =
-
-    wishQueue.shift();
-
-
-  const spotlight =
-
-    document
-    .getElementById(
-      "spotlight"
-    );
-
-
-  document
-    .getElementById(
-      "newWish"
-    )
-    .textContent =
-
-    "「" +
-    wish.wish +
-    "」";
-
-
-  document
-    .getElementById(
-      "newUser"
-    )
-    .textContent =
-
-    wish.instagram;
-
-
-  spotlight
-    .classList
-    .add(
-      "active"
-    );
-
-
-  setTimeout(
-
-    () => {
 
 
       spotlight
         .classList
-        .remove(
+        .add(
           "active"
         );
+
 
 
       setTimeout(
 
         () => {
 
-          playNextWish();
+
+          spotlight
+            .classList
+            .remove(
+              "active"
+            );
+
+
+
+          setTimeout(
+
+            () => {
+
+              playNextWish();
+
+            },
+
+            SPOTLIGHT_GAP
+
+          );
+
 
         },
 
-        SPOTLIGHT_GAP
+        SPOTLIGHT_DURATION
 
       );
 
-
-    },
-
-    SPOTLIGHT_DURATION
-
-  );
-
-}
+    }
 
 
-/* =====================================
-   STATUS
-===================================== */
 
-function
-updateStatus() {
+    /* =========================================
+       STATUS
+       ========================================= */
 
-  document
-    .getElementById(
-      "status"
-    )
-    .textContent =
-
-    wishes.length +
-    " WISHES · LIVE";
-
-}
+    function updateStatus() {
 
 
-/* =====================================
-   COLOR
-===================================== */
+      document
+        .getElementById(
+          "status"
+        )
+        .textContent =
 
-function
-sanitizeColor(
-  color
-) {
+        wishes.length +
+        " WISHES · LIVE";
 
-
-  const allowed = [
-
-    "green",
-
-    "rose",
-
-    "peach",
-
-    "mauve",
-
-    "sand"
-
-  ];
+    }
 
 
-  return
 
-    allowed.includes(
-      color
-    )
+    /* =========================================
+       START
+       ========================================= */
 
-    ? color
-
-    : "green";
-
-}
+    async function init() {
 
 
-/* =====================================
-   START
-===================================== */
-
-async function
-init() {
-
-  await
-  loadInitialWishes();
-
-  startRealtime();
-
-}
+      await loadInitialWishes();
 
 
-init();
+      startRealtime();
 
-</script>
+    }
+
+
+    init();
+
+  </script>
 
 
 </body>
+
 </html>
