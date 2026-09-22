@@ -430,7 +430,7 @@ const API_URL =
    設定
 ======================================== */
 
-const REFRESH_INTERVAL = 4000;
+const REFRESH_INTERVAL = 2000;
 const SPOTLIGHT_DURATION = 8000;
 const MAX_VISIBLE_WISHES = 12;
 
@@ -493,7 +493,7 @@ async function fetchWishes() {
     */
 
     const response = await fetch(
-      API_URL + "?t=" + Date.now(),
+      API_URL + "?t=" + Date.now() + "&r=" + Math.random(),
       {
         method: "GET",
         cache: "no-store"
