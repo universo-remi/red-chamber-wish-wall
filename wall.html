@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Red Chamber Wish Wall</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 html, body {
   width: 100%;
@@ -18,34 +18,19 @@ html, body {
 }
 
 body {
-  font-family:
-    "Noto Sans TC",
-    "PingFang TC",
-    "Microsoft JhengHei",
-    sans-serif;
-  background: #f5f2eb;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   color: #292c29;
+  background: #f5f2eb;
 }
-
-/* ===== 整體背景 ===== */
 
 .wall {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-
   background:
-    radial-gradient(
-      circle at 15% 20%,
-      rgba(206,217,208,.55),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 88% 82%,
-      rgba(220,205,191,.35),
-      transparent 28%
-    ),
+    radial-gradient(circle at 15% 20%, rgba(206,217,208,.55), transparent 28%),
+    radial-gradient(circle at 88% 82%, rgba(220,205,191,.35), transparent 28%),
     #f5f2eb;
 }
 
@@ -55,7 +40,6 @@ body {
   inset: 0;
   pointer-events: none;
   opacity: .16;
-
   background-image:
     repeating-linear-gradient(
       0deg,
@@ -66,15 +50,12 @@ body {
     );
 }
 
-/* ===== 品牌 ===== */
-
 .brand {
   position: absolute;
   top: 5vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-
   text-align: center;
   font-family: Georgia, "Times New Roman", serif;
   letter-spacing: .32em;
@@ -85,14 +66,11 @@ body {
 .brand-cn {
   display: block;
   margin-top: 8px;
-
   font-family: "PingFang TC", sans-serif;
   font-size: .55em;
   letter-spacing: .5em;
   color: #747a74;
 }
-
-/* ===== 中央標題 ===== */
 
 .hero {
   position: absolute;
@@ -100,14 +78,12 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-
   text-align: center;
   pointer-events: none;
 }
 
 .eyebrow {
   margin-bottom: 20px;
-
   font-size: clamp(9px, .75vw, 14px);
   letter-spacing: .35em;
   color: #818781;
@@ -115,13 +91,7 @@ body {
 
 .hero h1 {
   margin: 0;
-
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
-
+  font-family: Georgia, "Noto Serif TC", "Songti TC", serif;
   font-size: clamp(30px, 3.2vw, 65px);
   font-weight: 400;
   letter-spacing: .12em;
@@ -130,13 +100,12 @@ body {
 
 .hero p {
   margin-top: 22px;
-
   font-size: clamp(10px, .85vw, 16px);
   letter-spacing: .15em;
   color: #7a807a;
 }
 
-/* ===== 心願卡 ===== */
+/* ===== 背景心願 ===== */
 
 #wishes {
   position: absolute;
@@ -146,36 +115,19 @@ body {
 
 .wish-card {
   position: absolute;
-
   width: clamp(170px, 15vw, 300px);
   min-height: 95px;
-
   padding: clamp(16px, 1.3vw, 25px);
-
-  border-radius: 2px;
   border: 1px solid rgba(70,75,70,.08);
-
-  box-shadow:
-    0 8px 35px rgba(40,45,40,.055);
-
+  box-shadow: 0 8px 35px rgba(40,45,40,.055);
   opacity: 0;
-
   animation:
-    cardAppear 1.2s ease forwards,
+    cardAppear .7s ease forwards,
     float 8s ease-in-out infinite alternate;
-
-  transition:
-    opacity .7s,
-    transform .7s;
 }
 
 .wish-text {
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
-
+  font-family: Georgia, "Noto Serif TC", "Songti TC", serif;
   font-size: clamp(13px, 1vw, 19px);
   line-height: 1.8;
   letter-spacing: .04em;
@@ -183,54 +135,36 @@ body {
 
 .wish-user {
   margin-top: 14px;
-
   font-size: clamp(8px, .65vw, 12px);
   letter-spacing: .08em;
   color: rgba(50,55,50,.58);
 }
 
-/* 心願色 */
+.color-green { background: rgba(206,217,208,.76); }
+.color-rose  { background: rgba(217,197,194,.72); }
+.color-peach { background: rgba(223,203,184,.70); }
+.color-mauve { background: rgba(201,193,202,.72); }
+.color-sand  { background: rgba(216,208,190,.72); }
 
-.color-green {
-  background: rgba(206,217,208,.76);
-}
-
-.color-rose {
-  background: rgba(217,197,194,.72);
-}
-
-.color-peach {
-  background: rgba(223,203,184,.70);
-}
-
-.color-mauve {
-  background: rgba(201,193,202,.72);
-}
-
-.color-sand {
-  background: rgba(216,208,190,.72);
-}
-
-/* ===== 新心願 Spotlight ===== */
+/* ===== 新心願 ===== */
 
 #spotlight {
   position: fixed;
   inset: 0;
   z-index: 100;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: rgba(34,38,34,.28);
-  backdrop-filter: blur(4px);
+  background: rgba(34,38,34,.22);
+  backdrop-filter: blur(3px);
 
   opacity: 0;
   visibility: hidden;
 
   transition:
-    opacity .8s ease,
-    visibility .8s;
+    opacity .5s ease,
+    visibility .5s;
 }
 
 #spotlight.active {
@@ -240,9 +174,8 @@ body {
 
 .spotlight-card {
   width: min(58vw, 820px);
-  min-height: 330px;
-
-  padding: 55px 70px;
+  min-height: 300px;
+  padding: 50px 70px;
 
   display: flex;
   flex-direction: column;
@@ -250,18 +183,15 @@ body {
   justify-content: center;
 
   text-align: center;
-
   background: rgba(248,246,240,.97);
+  box-shadow: 0 35px 90px rgba(20,25,20,.16);
 
-  box-shadow:
-    0 35px 90px rgba(20,25,20,.16);
-
-  transform: scale(.92);
+  transform: scale(.95);
   opacity: 0;
 
   transition:
-    transform .9s cubic-bezier(.2,.7,.2,1),
-    opacity .9s;
+    transform .5s ease,
+    opacity .5s ease;
 }
 
 #spotlight.active .spotlight-card {
@@ -270,8 +200,7 @@ body {
 }
 
 .new-label {
-  margin-bottom: 30px;
-
+  margin-bottom: 26px;
   font-size: clamp(10px, .8vw, 15px);
   letter-spacing: .28em;
   color: #758078;
@@ -279,34 +208,24 @@ body {
 
 .new-wish {
   max-width: 680px;
-
-  font-family:
-    Georgia,
-    "Noto Serif TC",
-    "Songti TC",
-    serif;
-
+  font-family: Georgia, "Noto Serif TC", "Songti TC", serif;
   font-size: clamp(26px, 2.5vw, 50px);
   line-height: 1.65;
   letter-spacing: .05em;
 }
 
 .new-user {
-  margin-top: 28px;
-
+  margin-top: 24px;
   font-size: clamp(11px, .85vw, 16px);
   letter-spacing: .08em;
   color: #737973;
 }
 
-/* ===== 狀態 ===== */
-
 .status {
   position: absolute;
-  bottom: 4vh;
+  bottom: 3vh;
   left: 50%;
   transform: translateX(-50%);
-
   z-index: 8;
 
   font-size: clamp(8px, .6vw, 11px);
@@ -314,12 +233,10 @@ body {
   color: #979b96;
 }
 
-/* ===== 動畫 ===== */
-
 @keyframes cardAppear {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(10px);
   }
 
   to {
@@ -329,16 +246,9 @@ body {
 }
 
 @keyframes float {
-  from {
-    translate: 0 0;
-  }
-
-  to {
-    translate: 0 -7px;
-  }
+  from { translate: 0 0; }
+  to { translate: 0 -6px; }
 }
-
-/* 小螢幕也能測 */
 
 @media (max-width: 800px) {
   .hero h1 {
@@ -346,14 +256,13 @@ body {
   }
 
   .spotlight-card {
-    width: 82vw;
-    min-height: 260px;
-    padding: 40px 28px;
+    width: 84vw;
+    min-height: 250px;
+    padding: 38px 26px;
   }
 }
 </style>
 </head>
-
 
 <body>
 
@@ -364,16 +273,13 @@ body {
     <span class="brand-cn">朱棧</span>
   </div>
 
-
   <div class="hero">
 
     <div class="eyebrow">
       RED CHAMBER WISH WALL
     </div>
 
-    <h1>
-      願你所念，皆有回響。
-    </h1>
+    <h1>願你所念，皆有回響。</h1>
 
     <p>
       把心願留在這裡，讓它被世界輕輕接住
@@ -381,18 +287,15 @@ body {
 
   </div>
 
-
   <div id="wishes"></div>
 
-
   <div class="status" id="status">
-    WISHES ARE ARRIVING
+    CONNECTING…
   </div>
 
 </div>
 
 
-<!-- 新心願 -->
 <div id="spotlight">
 
   <div class="spotlight-card">
@@ -401,15 +304,9 @@ body {
       ✦ 一個新的心願抵達
     </div>
 
-    <div
-      class="new-wish"
-      id="newWish">
-    </div>
+    <div class="new-wish" id="newWish"></div>
 
-    <div
-      class="new-user"
-      id="newUser">
-    </div>
+    <div class="new-user" id="newUser"></div>
 
   </div>
 
@@ -418,46 +315,40 @@ body {
 
 <script>
 
-/* ========================================
-   Google Apps Script
-======================================== */
+/* ==============================
+   SUPABASE
+============================== */
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyR-8OPisnU0hqhJa3Y2oAfLZXEA1PnkXK1YkpovPG6PijeDVEG8szyBaD39p63uPGg/exec";
+const SUPABASE_URL =
+  "https://vwlrwbwkjdisqnuyhyjv.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_eBt028R9cdusb-jR6Kd5jA_eY6HMlv2";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
-/* ========================================
+/* ==============================
    設定
-======================================== */
+============================== */
 
-const REFRESH_INTERVAL = 2000;
-const SPOTLIGHT_DURATION = 8000;
+const SPOTLIGHT_DURATION = 3000;
+const SPOTLIGHT_GAP = 500;
 const MAX_VISIBLE_WISHES = 12;
 
-
-/*
-  用來記錄這台螢幕已經看過哪些心願。
-
-  第一次打開牆時：
-  現有資料只顯示在背景，不會全部跳 Spotlight。
-
-  之後新增的才會跳出。
-*/
-
+let wishes = [];
 let knownIds = new Set();
 
-let firstLoad = true;
-
+let wishQueue = [];
 let spotlightRunning = false;
 
-let wishQueue = [];
 
-
-/* ========================================
-   固定位置
-
-   故意避開中央標題。
-======================================== */
+/* ==============================
+   心願位置
+============================== */
 
 const positions = [
 
@@ -480,131 +371,153 @@ const positions = [
 ];
 
 
-/* ========================================
-   取得心願
-======================================== */
+/* ==============================
+   初始載入
+============================== */
 
-async function fetchWishes() {
+async function loadInitialWishes() {
 
-  try {
+  const { data, error } = await db
+    .from("wishes")
+    .select("*")
+    .eq("is_visible", true)
+    .order("created_at", {
+      ascending: true
+    })
+    .limit(50);
 
-    /*
-      加 timestamp 避免瀏覽器一直使用舊資料
-    */
-
-    const response = await fetch(
-      API_URL + "?t=" + Date.now() + "&r=" + Math.random(),
-      {
-        method: "GET",
-        cache: "no-store"
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("API response error");
-    }
-
-    const data = await response.json();
-
-    if (!data.success) {
-      throw new Error("API returned unsuccessful result");
-    }
-
-    const wishes = data.wishes || [];
-
-    document.getElementById("status").textContent =
-      wishes.length + " WISHES · LIVE";
-
-
-    /*
-      第一次開啟：
-      把原本就存在的心願記錄起來。
-      不播放新心願動畫。
-    */
-
-    if (firstLoad) {
-
-      wishes.forEach(wish => {
-        knownIds.add(wish.id);
-      });
-
-      firstLoad = false;
-
-      renderWall(wishes);
-
-      return;
-    }
-
-
-    /*
-      找出這次才出現的新投稿
-    */
-
-    const newWishes = wishes.filter(
-      wish => !knownIds.has(wish.id)
-    );
-
-
-    newWishes.forEach(wish => {
-
-      knownIds.add(wish.id);
-
-      wishQueue.push(wish);
-
-    });
-
-
-    renderWall(wishes);
-
-
-    /*
-      如果現在沒有 Spotlight 在播放，
-      開始播放排隊的新心願。
-    */
-
-    if (
-      !spotlightRunning &&
-      wishQueue.length > 0
-    ) {
-
-      playNextWish();
-
-    }
-
-  }
-
-  catch (error) {
+  if (error) {
 
     console.error(error);
 
     document.getElementById("status").textContent =
-      "RECONNECTING…";
+      "CONNECTION ERROR";
 
+    return;
   }
+
+  wishes = data || [];
+
+  wishes.forEach(wish => {
+    knownIds.add(wish.id);
+  });
+
+  renderWall();
+
+  document.getElementById("status").textContent =
+    wishes.length + " WISHES · LIVE";
+}
+
+
+/* ==============================
+   REALTIME
+============================== */
+
+function startRealtime() {
+
+  db.channel("red-chamber-wish-wall")
+
+    .on(
+      "postgres_changes",
+
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "wishes"
+      },
+
+      payload => {
+
+        const wish = payload.new;
+
+        /*
+          避免重複
+        */
+
+        if (knownIds.has(wish.id)) {
+          return;
+        }
+
+        knownIds.add(wish.id);
+
+
+        /*
+          如果被設定成不公開，
+          不進牆。
+        */
+
+        if (!wish.is_visible) {
+          return;
+        }
+
+
+        /*
+          馬上加入背景牆
+        */
+
+        wishes.push(wish);
+
+        renderWall();
+
+
+        /*
+          加入 Spotlight 排隊
+        */
+
+        wishQueue.push(wish);
+
+
+        if (!spotlightRunning) {
+          playNextWish();
+        }
+
+
+        document.getElementById("status").textContent =
+          wishes.length + " WISHES · LIVE";
+
+      }
+    )
+
+    .subscribe(status => {
+
+      console.log(
+        "Realtime status:",
+        status
+      );
+
+      if (status === "SUBSCRIBED") {
+
+        document.getElementById("status").textContent =
+          wishes.length + " WISHES · LIVE";
+
+      }
+
+      else if (
+        status === "CHANNEL_ERROR" ||
+        status === "TIMED_OUT"
+      ) {
+
+        document.getElementById("status").textContent =
+          "RECONNECTING…";
+
+      }
+
+    });
 
 }
 
 
-/* ========================================
-   畫出背景心願
-======================================== */
+/* ==============================
+   畫背景心願
+============================== */
 
-function renderWall(wishes) {
+function renderWall() {
 
   const container =
     document.getElementById("wishes");
 
-
-  /*
-    只取最新幾則。
-
-    如果未來有幾百則投稿，
-    不會全部塞到畫面上。
-  */
-
   const visible =
     wishes.slice(-MAX_VISIBLE_WISHES);
-
 
   container.innerHTML = "";
 
@@ -617,44 +530,18 @@ function renderWall(wishes) {
     const color =
       sanitizeColor(wish.color);
 
-
     card.className =
       "wish-card color-" + color;
 
 
-    /*
-      使用預設位置。
-    */
-
     const position =
       positions[index % positions.length];
-
 
     card.style.left =
       position.left + "%";
 
     card.style.top =
       position.top + "%";
-
-
-    /*
-      每張卡稍微有不同尺寸，
-      畫面比較不像制式列表。
-    */
-
-    const sizeVariation =
-      0.88 + ((index % 4) * 0.06);
-
-    card.style.transform =
-      "scale(" + sizeVariation + ")";
-
-
-    /*
-      動畫稍微錯開
-    */
-
-    card.style.animationDelay =
-      (index * 0.08) + "s";
 
 
     const text =
@@ -687,9 +574,9 @@ function renderWall(wishes) {
 }
 
 
-/* ========================================
-   播放新心願
-======================================== */
+/* ==============================
+   Spotlight Queue
+============================== */
 
 function playNextWish() {
 
@@ -698,9 +585,7 @@ function playNextWish() {
     spotlightRunning = false;
 
     return;
-
   }
-
 
   spotlightRunning = true;
 
@@ -712,17 +597,10 @@ function playNextWish() {
   const spotlight =
     document.getElementById("spotlight");
 
-  const newWish =
-    document.getElementById("newWish");
-
-  const newUser =
-    document.getElementById("newUser");
-
-
-  newWish.textContent =
+  document.getElementById("newWish").textContent =
     "「" + wish.wish + "」";
 
-  newUser.textContent =
+  document.getElementById("newUser").textContent =
     wish.instagram;
 
 
@@ -730,7 +608,7 @@ function playNextWish() {
 
 
   /*
-    顯示 8 秒
+    顯示 3 秒
   */
 
   setTimeout(() => {
@@ -739,25 +617,14 @@ function playNextWish() {
 
 
     /*
-      等淡出動畫結束後，
-      再播下一個。
+      0.5 秒後接下一個
     */
 
     setTimeout(() => {
 
-      if (wishQueue.length > 0) {
+      playNextWish();
 
-        playNextWish();
-
-      }
-
-      else {
-
-        spotlightRunning = false;
-
-      }
-
-    }, 1000);
+    }, SPOTLIGHT_GAP);
 
 
   }, SPOTLIGHT_DURATION);
@@ -765,9 +632,9 @@ function playNextWish() {
 }
 
 
-/* ========================================
-   防止錯誤顏色名稱
-======================================== */
+/* ==============================
+   顏色安全檢查
+============================== */
 
 function sanitizeColor(color) {
 
@@ -779,25 +646,25 @@ function sanitizeColor(color) {
     "sand"
   ];
 
-  if (allowed.includes(color)) {
-    return color;
-  }
-
-  return "green";
-
+  return allowed.includes(color)
+    ? color
+    : "green";
 }
 
 
-/* ========================================
+/* ==============================
    啟動
-======================================== */
+============================== */
 
-fetchWishes();
+async function init() {
 
-setInterval(
-  fetchWishes,
-  REFRESH_INTERVAL
-);
+  await loadInitialWishes();
+
+  startRealtime();
+
+}
+
+init();
 
 </script>
 
