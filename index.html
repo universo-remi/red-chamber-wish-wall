@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f3ed">
+
+  <title>Red Chamber｜心願牆</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+      color: #292b29;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(206,217,208,.45), transparent 34%),
+        radial-gradient(circle at 95% 85%, rgba(225,213,199,.38), transparent 32%),
+        #f7f4ee;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          rgba(40,45,40,.03) 0,
+          rgba(40,45,40,.03) 1px,
+          transparent 1px,
+          transparent 4px
+        );
+    }
+
+    .page {
+      width: min(100%, 560px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 42px 24px 54px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      text-align: center;
+      letter-spacing: .22em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      margin-bottom: 62px;
+    }
+
+    .brand-cn {
+      display: block;
+      margin-top: 7px;
+      font-family: "Noto Sans TC", "PingFang TC", sans-serif;
+      font-size: 10px;
+      letter-spacing: .42em;
+      color: #747a74;
+    }
+
+    .eyebrow {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: .24em;
+      color: #7a817a;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: clamp(29px, 8vw, 40px);
+      line-height: 1.4;
+      font-weight: 400;
+      letter-spacing: .06em;
+    }
+
+    .intro {
+      max-width: 330px;
+      margin: 18px auto 46px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 2;
+      color: #6b706b;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      letter-spacing: .08em;
+      margin-bottom: 11px;
+    }
+
+    .required {
+      color: #89998c;
+      margin-left: 4px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid #aeb7ae;
+      border-radius: 0;
+      padding: 13px 2px;
+      background: transparent;
+      color: #292b29;
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color .25s;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: none;
+      line-height: 1.8;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus {
+      border-color: #515b53;
+    }
+
+    textarea::placeholder,
+    input::placeholder {
+      color: #aaa9a3;
+    }
+
+    .counter {
+      text-align: right;
+      margin-top: 7px;
+      font-size: 11px;
+      color: #999b96;
+    }
+
+    .color-label {
+      margin-bottom: 16px;
+    }
+
+    .colors {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .color-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .color-dot {
+      width: 42px;
+      height: 42px;
+      display: block;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(60,60,60,.08);
+      position: relative;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .color-option input:checked + .color-dot {
+      transform: scale(.88);
+      box-shadow:
+        0 0 0 4px #f7f4ee,
+        0 0 0 5px #59635b;
+    }
+
+    .green { background: #ced9d0; }
+    .rose  { background: #d9c5c2; }
+    .peach { background: #dfcbb8; }
+    .mauve { background: #c9c1ca; }
+    .sand  { background: #d8d0be; }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      margin: 40px 0 27px;
+      font-size: 11px;
+      line-height: 1.8;
+      color: #777b76;
+    }
+
+    .consent input {
+      margin-top: 5px;
+      accent-color: #758279;
+      flex: 0 0 auto;
+    }
+
+    button {
+      width: 100%;
+      height: 58px;
+      border: 0;
+      border-radius: 0;
+      background: #263029;
+      color: #fff;
+      font-size: 14px;
+      letter-spacing: .14em;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+
+    button:active {
+      transform: scale(.99);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    .note {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 10px;
+      color: #999b96;
+      line-height: 1.7;
+    }
+
+    .error {
+      display: none;
+      margin: -8px 0 20px;
+      text-align: center;
+      color: #986c67;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    /* 成功畫面 */
+
+    #successPage {
+      display: none;
+      min-height: calc(100vh - 96px);
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      animation: fadeIn .7s ease both;
+    }
+
+    .success-mark {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      color: #819187;
+      margin-bottom: 25px;
+    }
+
+    #successPage h2 {
+      margin: 0 0 26px;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: 31px;
+      font-weight: 400;
+      letter-spacing: .08em;
+    }
+
+    .look-up {
+      font-size: 18px;
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+
+    .share-card {
+      margin: 0 auto;
+      width: 100%;
+      padding: 28px 24px;
+      border: 1px solid rgba(84,96,87,.25);
+      background: rgba(255,255,255,.32);
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    .share-card strong {
+      font-weight: 500;
+      color: #46534a;
+    }
+
+    .closing {
+      margin-top: 34px;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: 15px;
+      letter-spacing: .08em;
+    }
+
+    .waiting {
+      margin-top: 16px;
+      font-size: 10px;
+      color: #999b96;
+      line-height: 1.8;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 700px) {
+      .page {
+        padding-top: 58px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page">
+
+    <!-- 投稿頁 -->
+    <section id="formPage">
+
+      <div class="brand">
+        RED CHAMBER
+        <span class="brand-cn">朱棧</span>
+      </div>
+
+      <div class="eyebrow">RED CHAMBER WISH WALL</div>
+
+      <h1>寫下一個，<br>你想實現的心願。</h1>
+
+      <p class="intro">
+        有些心願適合收藏，<br>
+        有些心願值得被看見。<br>
+        留下一句話，讓它在這裡被好好接住。
+      </p>
+
+      <form id="wishForm">
+
+        <div class="form-group">
+          <label for="wish">
+            你的心願<span class="required">*</span>
+          </label>
+
+          <textarea
+            id="wish"
+            maxlength="50"
+            placeholder="我希望……"
+            required
+          ></textarea>
+
+          <div class="counter">
+            <span id="wishCount">0</span> / 50
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="instagram">
+            Instagram 帳號<span class="required">*</span>
+          </label>
+
+          <input
+            id="instagram"
+            type="text"
+            maxlength="50"
+            autocomplete="off"
+            autocapitalize="none"
+            placeholder="@youraccount"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="color-label">選一個屬於這個心願的顏色</label>
+
+          <div class="colors">
+
+            <label class="color-option">
+              <input type="radio" name="color" value="green" checked>
+              <span class="color-dot green"></span>
+            </label>
+
+            <label class="color-option">
+              <input type="radio" name="color" value="rose">
+              <span class="color-dot rose"></span>
+            </label>
+
+            <label class="color-option">
+              <input type="radio" name="color" value="peach">
+              <span class="color-dot peach"></span>
+            </label>
+
+            <label class="color-option">
+              <input type="radio" name="color" value="mauve">
+              <span class="color-dot mauve"></span>
+            </label>
+
+            <label class="color-option">
+              <input type="radio" name="color" value="sand">
+              <span class="color-dot sand"></span>
+            </label>
+
+          </div>
+        </div>
+
+        <label class="consent">
+          <input id="consent" type="checkbox" required>
+
+          <span>
+            我已閱讀並同意活動辦法及個人資料蒐集說明，
+            並同意本次填寫的心願內容與 Instagram 帳號
+            公開顯示於 Red Chamber 電子心願牆。
+          </span>
+        </label>
+
+        <div id="errorMessage" class="error"></div>
+
+        <button id="submitButton" type="submit">
+          送出我的心願
+        </button>
+
+        <p class="note">
+          每個 Instagram 帳號之抽獎資格以活動辦法為準。
+        </p>
+
+      </form>
+    </section>
+
+
+    <!-- 成功頁 -->
+    <section id="successPage">
+
+      <div class="success-mark">✦</div>
+
+      <h2>心願已送達 ♡</h2>
+
+      <div class="look-up">
+        抬頭看看，<br>
+        你的心願正在心願牆上出現 ✦
+      </div>
+
+      <div class="share-card">
+        找到你的心願，拍下這一刻吧！<br><br>
+
+        分享至 <strong>Instagram Story</strong><br>
+        並標記 <strong>@Red Chamber</strong><br>
+        出示分享畫面，<br>
+        即可至現場兌換一份小禮 ♡
+      </div>
+
+      <div class="closing">
+        願你的心願，都有回響。
+      </div>
+
+      <div class="waiting">
+        找不到你的心願？<br>
+        它可能正在排隊，稍等一下再抬頭看看 ♡
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbyR-8OPisnU0hqhJa3Y2oAfLZXEA1PnkXK1YkpovPG6PijeDVEG8szyBaD39p63uPGg/exec";
+
+    const form = document.getElementById("wishForm");
+    const wishInput = document.getElementById("wish");
+    const instagramInput = document.getElementById("instagram");
+    const counter = document.getElementById("wishCount");
+    const submitButton = document.getElementById("submitButton");
+    const errorMessage = document.getElementById("errorMessage");
+
+    wishInput.addEventListener("input", () => {
+      counter.textContent = wishInput.value.length;
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      errorMessage.style.display = "none";
+
+      const wish = wishInput.value.trim();
+
+      const instagram = instagramInput.value
+        .trim()
+        .replace(/^@/, "")
+        .toLowerCase();
+
+      const color =
+        document.querySelector('input[name="color"]:checked').value;
+
+      if (!wish || !instagram) {
+        showError("請填寫心願與 Instagram 帳號。");
+        return;
+      }
+
+      if (
+        instagram.includes("http") ||
+        instagram.includes("/") ||
+        instagram.includes(" ")
+      ) {
+        showError("請輸入 Instagram 帳號，例如 @redchamber。");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "心願傳送中…";
+
+      try {
+
+        /*
+          Apps Script 跨網域投稿使用 no-cors。
+          資料仍會送到 Google Apps Script，
+          成功後顯示完成頁。
+        */
+
+        await fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify({
+            wish: wish,
+            instagram: instagram,
+            color: color
+          })
+        });
+
+        document.getElementById("formPage").style.display = "none";
+        document.getElementById("successPage").style.display = "flex";
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      } catch (error) {
+
+        console.error(error);
+
+        showError(
+          "心願暫時沒有成功送出，請確認網路後再試一次。"
+        );
+
+        submitButton.disabled = false;
+        submitButton.textContent = "送出我的心願";
+      }
+    });
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
