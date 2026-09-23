@@ -344,25 +344,25 @@
 
       <div class="eyebrow">RED CHAMBER WISH WALL</div>
 
-      <h1>寫下一個，<br>你想實現的心願。</h1>
+      <h1>留下那句，<br>你想對「他」說的話。</h1>
 
       <p class="intro">
-        有些心願適合收藏，<br>
-        有些心願值得被看見。<br>
-        留下一句話，讓它在這裡有被傾聽的機會。
+        可以是自己、重要的人，<br>
+        也可以是你一直放在心上的某個存在。<br>
+        把今年還沒說出口的話，留在這裡。
       </p>
 
       <form id="wishForm">
 
         <div class="form-group">
           <label for="wish">
-            你的心願<span class="required">*</span>
+            你想說的話<span class="required">*</span>
           </label>
 
           <textarea
             id="wish"
             maxlength="50"
-            placeholder="我最想說的是..."
+            placeholder="想對「他」說……"
             required
           ></textarea>
 
@@ -388,7 +388,7 @@
         </div>
 
         <div class="form-group">
-          <label class="color-label">選一個屬於這個心願的顏色</label>
+          <label class="color-label">為這份心意，挑一個屬於它的顏色</label>
 
           <div class="colors">
 
@@ -433,7 +433,7 @@
         <div id="errorMessage" class="error"></div>
 
         <button id="submitButton" type="submit">
-          送出我的心願
+          留下這句話
         </button>
 
         <p class="note">
@@ -449,29 +449,29 @@
 
       <div class="success-mark">✦</div>
 
-      <h2>心願已送達 ♡</h2>
+      <h2>心意已送達♡</h2>
 
       <div class="look-up">
         抬頭看看，<br>
-        你的心願正在心願牆上出現 ✦
+        你留下的話正在心願牆上出現 ✦
       </div>
 
       <div class="share-card">
-        找到你的心願，拍下這一刻吧！<br><br>
+        找到你的心意，紀錄這一刻吧！<br><br>
 
         分享至 <strong>Instagram Story</strong><br>
-        並標記 <strong>@Red Chamber</strong><br>
+        並標記 <strong>@redchamber_cn</strong><br>
         出示分享畫面，<br>
-        即可至現場兌換一份小禮 ♡
+        即可至現場兌換一份小禮♡
       </div>
 
       <div class="closing">
-        願你的心願，都有回響。
+        願每一份心意，都能被好好接住。
       </div>
 
       <div class="waiting">
-        找不到你的心願？<br>
-        它可能正在排隊，稍等一下再抬頭看看 ♡
+        找不到你的留言嗎？<br>
+        它可能正在排隊，稍等一下再抬頭看看♡
       </div>
 
     </section>
@@ -518,7 +518,7 @@ const db = window.supabase.createClient(
         document.querySelector('input[name="color"]:checked').value;
 
       if (!wish || !instagram) {
-        showError("請填寫心願與 Instagram 帳號。");
+        showError("請完成留言並填寫 Instagram 帳號。");
         return;
       }
 
@@ -532,7 +532,7 @@ const db = window.supabase.createClient(
       }
 
       submitButton.disabled = true;
-      submitButton.textContent = "心願傳送中…";
+      submitButton.textContent = "心意傳送中…";
 
       try {
 
@@ -567,11 +567,11 @@ if (error) {
         console.error(error);
 
         showError(
-          "心願暫時沒有成功送出，請確認網路後再試一次。"
+          "心意暫時沒有成功送出，請確認網路後再試一次。"
         );
 
         submitButton.disabled = false;
-        submitButton.textContent = "送出我的心願";
+        submitButton.textContent = "送出我的心意";
       }
     });
 
